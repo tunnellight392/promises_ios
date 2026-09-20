@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// User-defaults keys. Kept in one place so the app and its preference views
 /// can't drift apart.
@@ -125,11 +126,62 @@ extension Font {
     /// A font built from a Dynamic Type text style — so it still follows the
     /// system's text size — in the user's chosen family, then multiplied by their
     /// in-app reading size.
+    ///
+    /// The result is a fixed point size, so SwiftUI won't rescale it on its own
+    /// when the system text size changes. Pass `typeSize` from the call site's
+    /// `@Environment(\.dynamicTypeSize)`: that both resolves the right base size
+    /// here and makes SwiftUI rebuild the text when the setting changes.
     static func reading(
         _ style: Font.TextStyle,
         font: FontChoice,
-        scale: CGFloat = 1
+        scale: CGFloat = 1,
+        typeSize: DynamicTypeSize
     ) -> Font {
-        .system(style, design: font.design).scaled(by: scale)
+        let base = UIFont.preferredFont(
+            forTextStyle: style.uiTextStyle,
+            compatibleWith: UITraitCollection(preferredContentSizeCategory: typeSize.contentSizeCategory)
+        )
+        return .system(size: base.pointSize * scale, design: font.design)
+    }
+}
+
+private extension Font.TextStyle {
+    var uiTextStyle: UIFont.TextStyle {
+        switch self {
+        case .extraLargeTitle: .extraLargeTitle
+        case .extraLargeTitle2: .extraLargeTitle2
+        case .largeTitle: .largeTitle
+        case .title: .title1
+        case .title2: .title2
+        case .title3: .title3
+        case .headline: .headline
+        case .subheadline: .subheadline
+        case .body: .body
+        case .callout: .callout
+        case .footnote: .footnote
+        case .caption: .caption1
+        case .caption2: .caption2
+        @unknown default: .body
+        }
+    }
+}
+
+private extension DynamicTypeSize {
+    var contentSizeCategory: UIContentSizeCategory {
+        switch self {
+        case .xSmall: .extraSmall
+        case .small: .small
+        case .medium: .medium
+        case .large: .large
+        case .xLarge: .extraLarge
+        case .xxLarge: .extraExtraLarge
+        case .xxxLarge: .extraExtraExtraLarge
+        case .accessibility1: .accessibilityMedium
+        case .accessibility2: .accessibilityLarge
+        case .accessibility3: .accessibilityExtraLarge
+        case .accessibility4: .accessibilityExtraExtraLarge
+        case .accessibility5: .accessibilityExtraExtraExtraLarge
+        @unknown default: .large
+        }
     }
 }

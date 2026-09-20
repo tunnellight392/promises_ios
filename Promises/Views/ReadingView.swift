@@ -15,6 +15,8 @@ struct ReadingView: View {
     private static let sample = VerseRepository.shared.all
         .first { $0.reference == "Psalm 23:1" } ?? VerseRepository.shared[0]
 
+    @Environment(\.dynamicTypeSize) private var typeSize
+
     @AppStorage(PrefKey.bibleVersion) private var version: BibleVersion = .web
     @AppStorage(PrefKey.textSize) private var textSize: TextSize = .medium
     @AppStorage(PrefKey.fontChoice) private var fontChoice: FontChoice = .serif
@@ -25,11 +27,11 @@ struct ReadingView: View {
                 VStack(spacing: 12) {
                     Text(Self.sample.text(in: version))
                         .italic(version == .web)
-                        .font(.reading(.title3, font: fontChoice, scale: textSize.verseScale(for: version)))
+                        .font(.reading(.title3, font: fontChoice, scale: textSize.verseScale(for: version), typeSize: typeSize))
                         .multilineTextAlignment(.center)
 
                     Text("\(Self.sample.reference(in: version)) (\(version.tag))")
-                        .font(.reading(.footnote, font: fontChoice, scale: textSize.scale).weight(.semibold))
+                        .font(.reading(.footnote, font: fontChoice, scale: textSize.scale, typeSize: typeSize).weight(.semibold))
                         .foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: .infinity)

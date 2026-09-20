@@ -19,6 +19,7 @@ struct VerseOfTheDayView: View {
     private static let swipeThreshold: CGFloat = 60
 
     @Environment(FavoritesStore.self) private var favorites
+    @Environment(\.dynamicTypeSize) private var typeSize
 
     @AppStorage(PrefKey.bibleVersion) private var version: BibleVersion = .web
     @AppStorage(PrefKey.textSize) private var textSize: TextSize = .medium
@@ -124,14 +125,14 @@ struct VerseOfTheDayView: View {
             Text(verse.text(in: version))
                 // Malayalam has no true italic form, so only slant the English text.
                 .italic(version == .web)
-                .font(.reading(.title2, font: fontChoice, scale: textSize.verseScale(for: version)))
+                .font(.reading(.title2, font: fontChoice, scale: textSize.verseScale(for: version), typeSize: typeSize))
                 .lineSpacing(6)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white)
                 .shadow(color: .black.opacity(0.55), radius: 8, y: 2)
 
             Text("\(verse.reference(in: version)) (\(version.tag))")
-                .font(.reading(.subheadline, font: fontChoice, scale: textSize.scale).weight(.semibold))
+                .font(.reading(.subheadline, font: fontChoice, scale: textSize.scale, typeSize: typeSize).weight(.semibold))
                 .foregroundStyle(Color.promiseGold)
                 .shadow(color: .black.opacity(0.5), radius: 6, y: 2)
         }
@@ -175,7 +176,7 @@ struct VerseOfTheDayView: View {
             Button("Next Promise", systemImage: "shuffle", action: shuffle)
         }
 
-        ToolbarSpacer(.flexible, placement: .bottomBar)
+        ToolbarItem(placement: .bottomBar) { Spacer() }
 
         ToolbarItem(placement: .bottomBar) {
             Button("Browse", systemImage: "square.grid.2x2") { isBrowsing = true }
