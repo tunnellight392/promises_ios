@@ -73,6 +73,7 @@
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2700;
 				LastUpgradeCheck = 2700;
+				ORGANIZATIONNAME = tunnellight;
 				TargetAttributes = {
 					DC38A687305F68D900DB29EC = {
 						CreatedOnToolsVersion = 27.0;
