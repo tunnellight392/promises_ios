@@ -1,12 +1,12 @@
 # Privacy Policy for Promises
 
-**Effective date:** September 26, 2026
+**Effective date:** September 27, 2026
 
-Promises ("the app") is made by tunnellight ("we", "us"). This policy explains how the app handles your information. In short: **Promises does not collect, store, or share any of your personal data.**
+Promises ("the app") is made by Alex Therakathu, trading as tunnellight ("we", "us"). This policy explains how the app handles your information. In short: **Promises does not collect, store, or share your personal data. The only exception is if you choose to email us feedback — see [Feedback](#feedback) below.**
 
 ## Information We Collect
 
-We do not collect any personal information. Promises has no accounts or sign-in. It does not use analytics, advertising, or tracking tools, and it does not send any data to us or to anyone else. All Bible verses are built into the app, and the app works fully offline.
+The app itself does not collect any personal information. Promises has no accounts or sign-in. It does not use analytics, advertising, or tracking tools, and it does not send any data to us or to anyone else. All Bible verses are built into the app, and the app works fully offline.
 
 ## Information Stored on Your Device
 
@@ -28,7 +28,7 @@ When you share a verse, Promises opens the standard iOS share sheet. What you sh
 
 ## Feedback
 
-If you send feedback from the app, Promises opens your mail app with a message ready to send. Nothing is sent unless you choose to send it. If you send it, we receive your email address and your message. We use them only to read and reply to your feedback. We do not sell them or share them with anyone.
+If you send feedback from the app, Promises opens your mail app with a message ready to send. Nothing is sent unless you choose to send it. If you send it, we receive your email address and your message. We use them only to read and reply to your feedback. We never use them for tracking, advertising, or marketing, and we do not sell them or share them with anyone. If you'd like us to delete your feedback emails, just ask at the address below.
 
 ## Third-Party Services
 
@@ -36,7 +36,7 @@ Promises does not include any third-party SDKs, analytics services, or advertisi
 
 ## Children's Privacy
 
-Promises does not collect personal information from anyone, including children under 13.
+Promises does not collect personal information from anyone, including children.
 
 ## Changes to This Policy
 
@@ -44,4 +44,4 @@ If this policy changes, we will post the new version here and update the effecti
 
 ## Contact Us
 
-If you have questions about this privacy policy, please email us at **tunnellightt392@gmail.com**.
+Alex Therakathu (trading as tunnellight) is responsible for your information under this policy. If you have questions about this privacy policy or about your data, please email **tunnellightt392@gmail.com**.
