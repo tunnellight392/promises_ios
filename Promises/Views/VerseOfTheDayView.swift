@@ -30,6 +30,8 @@ struct VerseOfTheDayView: View {
     @State private var isBrowsing = false
     @State private var isShowingSettings = false
     @State private var isShowingFeedback = false
+    /// The rendered share card for the current verse, refreshed as it changes.
+    @State private var shareImage: Image?
 
     private let repository = VerseRepository.shared
 
@@ -59,6 +61,14 @@ struct VerseOfTheDayView: View {
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar { toolbarContent }
+        }
+        .task(id: ShareCardKey(index: index, version: version, fontChoice: fontChoice)) {
+            shareImage = VerseShareCard(
+                verse: verse,
+                version: version,
+                fontChoice: fontChoice,
+                backgroundName: backgroundName
+            ).renderImage()
         }
         .sheet(isPresented: $isBrowsing) {
             BrowseView { selected in
@@ -160,8 +170,18 @@ struct VerseOfTheDayView: View {
         }
 
         ToolbarItem(placement: .topBarTrailing) {
-            ShareLink(item: shareText) {
-                Label("Share", systemImage: "square.and.arrow.up")
+            if let shareImage {
+                ShareLink(
+                    item: shareImage,
+                    message: Text(shareText),
+                    preview: SharePreview(verse.reference(in: version), image: shareImage)
+                ) {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                }
+            } else {
+                ShareLink(item: shareText) {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                }
             }
         }
 
@@ -208,6 +228,13 @@ struct VerseOfTheDayView: View {
             index = repository.randomIndex(excluding: index)
         }
     }
+}
+
+/// Everything the share card's appearance depends on, so it re-renders on change.
+private struct ShareCardKey: Equatable {
+    let index: Int
+    let version: BibleVersion
+    let fontChoice: FontChoice
 }
 
 #Preview {
