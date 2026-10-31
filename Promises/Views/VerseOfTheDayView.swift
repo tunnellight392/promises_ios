@@ -31,7 +31,8 @@ struct VerseOfTheDayView: View {
     @State private var isShowingSettings = false
     @State private var isShowingFeedback = false
     /// The rendered share card for the current verse, refreshed as it changes.
-    @State private var shareImage: Image?
+    @State private var shareImage: UIImage?
+    @State private var isSharing = false
 
     private let repository = VerseRepository.shared
 
@@ -69,6 +70,24 @@ struct VerseOfTheDayView: View {
                 fontChoice: fontChoice,
                 backgroundName: backgroundName
             ).renderImage()
+        }
+        .sheet(isPresented: $isSharing) {
+            // The verse text travels alongside the card image, so apps that
+            // accept both (Messages, Mail, …) receive the words as well.
+            // Apps such as Signal keep only the image, so the text is also
+            // on the clipboard, ready to paste as a caption.
+            VStack(spacing: 0) {
+                if shareImage != nil {
+                    Label("Verse text copied — paste it as a caption if needed.", systemImage: "doc.on.clipboard")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 16)
+                        .padding(.horizontal)
+                }
+                ActivityView(items: ([shareImage, shareText] as [Any?]).compactMap { $0 })
+                    .ignoresSafeArea()
+            }
+            .presentationDetents([.medium, .large])
         }
         .sheet(isPresented: $isBrowsing) {
             BrowseView { selected in
@@ -170,18 +189,11 @@ struct VerseOfTheDayView: View {
         }
 
         ToolbarItem(placement: .topBarTrailing) {
-            if let shareImage {
-                ShareLink(
-                    item: shareImage,
-                    message: Text(shareText),
-                    preview: SharePreview(verse.reference(in: version), image: shareImage)
-                ) {
-                    Label("Share", systemImage: "square.and.arrow.up")
+            Button("Share", systemImage: "square.and.arrow.up") {
+                if shareImage != nil {
+                    UIPasteboard.general.string = shareText
                 }
-            } else {
-                ShareLink(item: shareText) {
-                    Label("Share", systemImage: "square.and.arrow.up")
-                }
+                isSharing = true
             }
         }
 
@@ -235,6 +247,18 @@ private struct ShareCardKey: Equatable {
     let index: Int
     let version: BibleVersion
     let fontChoice: FontChoice
+}
+
+/// The system share sheet. Used instead of `ShareLink` because `ShareLink`
+/// can't share an image and text together — most apps drop its `message`.
+private struct ActivityView: UIViewControllerRepresentable {
+    let items: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: items, applicationActivities: nil)
+    }
+
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }
 
 #Preview {
