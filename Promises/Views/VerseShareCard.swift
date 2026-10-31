@@ -67,11 +67,10 @@ struct VerseShareCard: View {
 
     /// Renders the card to an image suitable for sharing.
     @MainActor
-    func renderImage() -> Image? {
+    func renderImage() -> UIImage? {
         let renderer = ImageRenderer(content: self)
         renderer.scale = 3
-        guard let uiImage = renderer.uiImage else { return nil }
-        return Image(uiImage: uiImage)
+        return renderer.uiImage
     }
 }
 
