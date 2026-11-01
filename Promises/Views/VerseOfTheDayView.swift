@@ -3,6 +3,7 @@
 //  Promises
 //
 
+import LinkPresentation
 import SwiftUI
 
 /// The home screen: today's promise set over a nature photograph.
@@ -48,6 +49,13 @@ struct VerseOfTheDayView: View {
         verse.sharingText(in: version) + "\n\nvia Promises"
     }
 
+    /// The card image (when rendered) followed by the verse text.
+    private var shareItems: [Any] {
+        guard let shareImage else { return [shareText] }
+        let card = ShareCardItem(image: shareImage, title: "\(verse.reference(in: version)) (\(version.tag))")
+        return [card, shareText]
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -76,19 +84,25 @@ struct VerseOfTheDayView: View {
             // accept both (Messages, Mail, …) receive the words as well.
             // Apps such as Signal keep only the image, so the text is also
             // on the clipboard, ready to paste as a caption.
-            VStack(spacing: 0) {
-                if shareImage != nil {
-                    Label("Verse text copied — paste it as a caption if needed.", systemImage: "doc.on.clipboard")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .padding(.top, 16)
-                        .padding(.horizontal)
-                }
-                ActivityView(items: ([shareImage, shareText] as [Any?]).compactMap { $0 })
-                    .ignoresSafeArea()
-            }
-            .presentationDetents([.medium, .large])
+            ActivityView(items: shareItems)
+                .presentationDetents([.medium, .large])
+                .ignoresSafeArea()
         }
+        // Shown above the share sheet rather than inside it, which the system
+        // share sheet would lay out over.
+        .overlay(alignment: .top) {
+            if isSharing, shareImage != nil {
+                Label("Verse text copied — paste it as a caption if needed.", systemImage: "doc.on.clipboard")
+                    .font(.footnote)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 10)
+                    .background(.regularMaterial, in: .capsule)
+                    .padding(.horizontal)
+                    .padding(.top, 56)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .animation(.snappy, value: isSharing)
         .sheet(isPresented: $isBrowsing) {
             BrowseView { selected in
                 withAnimation(.smooth(duration: 0.4)) { index = selected }
@@ -259,6 +273,33 @@ private struct ActivityView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
+}
+
+/// The share card as a share-sheet item. Supplying link metadata makes the
+/// sheet's header preview the card itself; otherwise it previews the text.
+private final class ShareCardItem: NSObject, UIActivityItemSource {
+    let image: UIImage
+    let title: String
+
+    init(image: UIImage, title: String) {
+        self.image = image
+        self.title = title
+    }
+
+    func activityViewControllerPlaceholderItem(_ controller: UIActivityViewController) -> Any {
+        image
+    }
+
+    func activityViewController(_ controller: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        image
+    }
+
+    func activityViewControllerLinkMetadata(_ controller: UIActivityViewController) -> LPLinkMetadata? {
+        let metadata = LPLinkMetadata()
+        metadata.title = title
+        metadata.imageProvider = NSItemProvider(object: image)
+        return metadata
+    }
 }
 
 #Preview {

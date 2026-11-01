@@ -94,8 +94,11 @@ struct BrowseView: View {
 
     /// The synthetic Favorites group, or `nil` when nothing is saved yet.
     private var savedTopic: BrowseTopic? {
+        // A few passages appear under more than one topic; list each saved
+        // reference once, at its first occurrence.
+        var seen = Set<String>()
         let saved = repository.all.enumerated()
-            .filter { favorites.references.contains($0.element.reference) }
+            .filter { favorites.references.contains($0.element.reference) && seen.insert($0.element.reference).inserted }
             .map { BrowseVerse(id: $0.offset, verse: $0.element) }
         guard !saved.isEmpty else { return nil }
         return BrowseTopic(id: "favorites", name: "Favorites", imageName: nil, verses: saved)
