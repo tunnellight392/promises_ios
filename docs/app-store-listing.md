@@ -1,7 +1,7 @@
 # App Store Listing — Promises
 
-Copy for App Store Connect, version 1.0. Character counts are shown next to
-each field's limit.
+Copy for App Store Connect, version 1.0. Numbers in parentheses are App Store
+Connect's character limits; every field below fits within them.
 
 ## App Information
 
