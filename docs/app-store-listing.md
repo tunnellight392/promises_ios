@@ -121,13 +121,17 @@ Day and Browse screens.
 
 ## Screenshots
 
-Captured on iOS 27.0 simulators with a clean 9:41 status bar, full resolution
-and unscaled, ready to upload.
+Captured on iOS 27.0 simulators with a clean 9:41 status bar. All are PNGs
+with no alpha channel, which App Store Connect requires.
 
 | Device | App Store size | Resolution | Folder |
 | --- | --- | --- | --- |
 | iPhone 18 Pro Max | 6.9" display | 1320 × 2868 | `screenshots/iphone/` |
+| iPhone (scaled from the 6.9" set) | 6.3" display | 1206 × 2622 | `screenshots/iphone-6.3/` |
 | iPad Pro 13-inch (M5) | 13" display | 2064 × 2752 | `screenshots/ipad/` |
+
+App Store Connect only needs one iPhone size; it scales it for the others.
+Upload the 6.9" set, or the 6.3" set if that's the slot it asks for.
 
 Each folder has the same seven screens, in upload order:
 
