@@ -99,6 +99,26 @@ Notes for the reviewer:
 Promises needs no account and works fully offline. All verses are bundled in the app. The daily reminder is optional and can be turned on in Settings (… menu → Settings → Daily Promise). Sharing a verse opens the standard share sheet with a picture card and the verse text.
 ```
 
+## Header and Search Results
+
+Optional creative assets, shown to people on iOS 27 / iPadOS 27 and later.
+Upload in App Store Connect under Product Page Information → Header and
+Search Results, and check them with the Preview tool before submitting. Both
+are PNGs without an alpha channel, with the key content kept near the center.
+
+| Placement | File | Size |
+| --- | --- | --- |
+| Product page header | `creative-assets/header.png` | 3840 × 1646 (21:9) |
+| Search results | `creative-assets/search-results.png` | 3840 × 2560 (3:2) |
+
+The header is a single idea, Matthew 11:28 over the app's sunset valley photo.
+The search results image states what the app is and shows the Promise of the
+Day and Browse screens.
+
+![Product page header](creative-assets/header.png)
+
+![Search results](creative-assets/search-results.png)
+
 ## Screenshots
 
 Captured on iOS 27.0 simulators with a clean 9:41 status bar, full resolution
